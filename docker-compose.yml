@@ -1,0 +1,27 @@
+version: '3.4'
+services:
+  questionnaires.web:
+    build:
+      context: .
+      dockerfile: Questionnaires.Web/Dockerfile
+    ports:
+      - "5000:5000"
+      - "5001:5001"
+
+    depends_on:
+      - questionnaires.db
+
+  questionnaires.db:
+    image: postgres:16
+    container_name: questionnaires.db
+    environment:
+      - POSTGRES_DB=questionnaires
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=0000
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./sql:/docker-entrypoint-initdb.d
+      - postgres-data:/var/lib/postgresql/data
+volumes:
+  postgres-data:
